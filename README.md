@@ -1,6 +1,6 @@
 #  **README: Keamanan Data Terenkripsi dengan ECC & DWT Audio**
 
-##  Identitas Kelompok 3
+##  Identitas Kelompok 3 KRIPTOGRAFI RA
 
 * **Anggota**:
 
