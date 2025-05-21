@@ -1,95 +1,107 @@
-# Encrypted Text Protection Using ECC in Audio via Discrete Wavelet Transform (DWT)
+#  **README: Keamanan Data Terenkripsi dengan ECC & DWT Audio**
 
-A Python toolkit for secure steganography using Elliptic Curve Integrated Encryption Scheme (ECIES) and Discrete Wavelet Transform (DWT) for embedding encrypted data in audio files.
+##  Identitas Kelompok 3
 
-## Features
+* **Anggota**:
 
-- **True ECIES Encryption**: Implements full ECIES with ephemeral EC key, AES-GCM encryption, and MAC authentication
-- **Robust Audio Steganography**: Uses DWT for embedding data in audio files with minimal perceptual impact
-- **Comprehensive Metrics**: Includes tools for evaluating both steganography (SNR, BER, MOS) and cryptography (timings, entropy, avalanche)
-- **Easy-to-Use CLI**: Simple command-line interface for all operations
+  * Alfonso Pangaribuan (122140206)
+  * Handayani (122140166)
+  * Luthfianya Isyathun Rodiyyah (122140185)
 
-## Installation
+##  Deskripsi Singkat
 
-1. Clone the repository:
-   \`\`\`
-   git clone https://github.com/yourusername/ecies-dwt-toolkit.git
-   cd ecies-dwt-toolkit
-   \`\`\`
+Toolkit Python ini menghadirkan solusi keamanan data tingkat lanjut dengan:
 
-2. Install dependencies:
-   \`\`\`
-   pip install -r requirements.txt
-   \`\`\`
+1. **ECIES (Elliptic Curve Integrated Encryption Scheme)** untuk enkripsi teks yang efisien dan aman,
+2. **AES-GCM** untuk menjaga kerahasiaan sekaligus integritas, dan
+3. **Steganografi DWT (Discrete Wavelet Transform)** untuk menyembunyikan data terenkripsi ke dalam file audio tanpa merusak kualitas.
 
-## Usage
+> “Menggabungkan kriptografi mutakhir dan teknik steganografi cerdas untuk menjaga rahasia Anda.”
 
-### Key Generation
+##  Fitur Utama
 
-Generate an ECC key pair:
+*  **ECIES Lengkap**: Enkripsi hybrid dengan ephemeral key ECC + AES-GCM + MAC
+*  **Steganografi Audio Berbasis DWT**: Embed payload terenkripsi dengan gangguan minimal pada audio
+*  **Evaluasi Komprehensif**:
 
-\`\`\`
-python -m cli genkeys --curve secp256r1 --private-key private_key.pem --public-key public_key.pem
-\`\`\`
+  * **Steganografi**: SNR (Signal-to-Noise Ratio), BER (Bit Error Rate), MOS (Mean Opinion Score)
+  * **Kriptografi**: Waktu generate key, encryption/decryption, expansion ratio, avalanche effect, throughput
+*  **CLI Simpel**: Perintah intuitif untuk genkeys, embed, extract, dan evaluasi
 
-### Encryption and Embedding
+##  Instalasi
 
-Encrypt data and embed it in an audio file:
+```bash
+# Clone repositori
+git clone https://github.com/yourusername/ecies-dwt-toolkit.git
+cd ecies-dwt-toolkit
 
-\`\`\`
-python -m cli embed --public-key public_key.pem --cover-wav cover.wav --stego-wav stego.wav --input-file secret.txt
-\`\`\`
+# Install dependency
+pip install -r requirements.txt
+```
 
-### Extraction and Decryption
+## ⚙️ Cara Penggunaan
 
-Extract and decrypt data from a stego audio file:
+1. **Generate Key Pair**
 
-\`\`\`
-python -m cli extract --private-key private_key.pem --stego-wav stego.wav --output-file extracted.txt
-\`\`\`
+   ```bash
+   python -m cli genkeys \
+     --curve secp256r1 \
+     --private-key private_key.pem \
+     --public-key public_key.pem
+   ```
 
-### Evaluation
+2. **Encrypt & Embed**
 
-Evaluate steganography performance:
+   ```bash
+   python -m cli embed \
+     --public-key public_key.pem \
+     --cover-wav cover.wav \
+     --stego-wav stego.wav \
+     --input-file secret.txt
+   ```
 
-\`\`\`
-python -m cli eval-stego --original-wav cover.wav --stego-wav stego.wav --original-data secret.txt --extracted-data extracted.txt --plot
-\`\`\`
+3. **Extract & Decrypt**
 
-Evaluate cryptography performance:
+   ```bash
+   python -m cli extract \
+     --private-key private_key.pem \
+     --stego-wav stego.wav \
+     --output-file extracted.txt
+   ```
 
-\`\`\`
-python -m cli eval-crypto --curve secp256r1 --data-size 1024 --trials 100
-\`\`\`
+4. **Evaluasi Stego**
 
-## Technical Details
+   ```bash
+   python -m cli eval-stego \
+     --original-wav cover.wav \
+     --stego-wav stego.wav \
+     --original-data secret.txt \
+     --extracted-data extracted.txt \
+     --plot
+   ```
 
-### ECIES Implementation
+5. **Evaluasi Kripto**
 
-The ECIES implementation follows these steps:
+   ```bash
+   python -m cli eval-crypto \
+     --curve secp256r1 \
+     --data-size 1024 \
+     --trials 100
+   ```
 
-1. Generate ephemeral EC key pair (r, R = r·G)
-2. Compute shared secret (r·Kb)
-3. Derive encryption and MAC keys using HKDF-SHA256
-4. Encrypt plaintext using AES-GCM
-5. Return the complete packet: R || nonce || ciphertext || tag
+##  Detil Teknis
 
-### DWT Steganography
+* **ECIES**: Generate ephemeral key ➔ ECDH ➔ HKDF-SHA256 ➔ AES-GCM encrypt ➔ paket `[R||nonce||ciphertext||tag]`
+* **DWT Stego**: Dekomposisi audio ➔ modifikasi koefisien wavelet ➔ inverse DWT ➔ simpan stego.wav
 
-The DWT-based steganography works as follows:
+##  Contoh Skrip
 
-1. Apply DWT to the audio signal
-2. Modify wavelet coefficients to embed data
-3. Apply inverse DWT to reconstruct the audio signal
+Lihat folder `examples/` untuk contoh:
 
-## Examples
+* `generate_keys.py`
+* `encrypt_and_embed.py`
+* `extract_and_decrypt.py`
 
-Example scripts are provided in the `examples` directory:
+---
 
-- `generate_keys.py`: Generate ECC key pair
-- `encrypt_and_embed.py`: Encrypt data and embed it in audio
-- `extract_and_decrypt.py`: Extract and decrypt data from audio
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+*Kelompok 3—ECC-AES GCM & DWT Audio Steganography*
